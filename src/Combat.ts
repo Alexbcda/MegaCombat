@@ -1,5 +1,5 @@
 
-import { Viking } from './Viking'; // Adjust the path to your Viking class
+import { Viking } from './Viking'; 
 
 export class Combat {
 

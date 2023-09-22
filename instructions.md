@@ -5,7 +5,7 @@ Nous allons reprendre l'exemple des Vikings pour étendre un peu le TP en s'en i
 Nous allons maintenant déveloper plusieurs pans, petit à petit, du dernier TP pour en faire un petit jeu.
 
 ## Jeudi 21 septembre : nouveaux types de personnage
-
+Creatoon
 ### Redéfinition des personnages
 
 Tous les personnages auront désormais :

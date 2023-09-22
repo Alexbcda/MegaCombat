@@ -1,70 +1,62 @@
-export class Viking{
+import { Personnage } from './Personnage';
 
-    public nom: string
-    public sante: number
-    private santeInitiale: number
-    private _force: number
-    private arme: Arme
-    private defense: number
+export class Viking extends Personnage {
+    private defense: number = 10; // Définissez la valeur de défense par défaut ici
 
-    constructor(
-        nom: string,
-        sante: number,
-        santeInitiale: number,
-        force: number,
-        arme: Arme,
-        defense: number
-    ) {
-        this.nom = nom
-        this.sante = sante
-        this.santeInitiale = santeInitiale
-        this._force = force
-        this.arme = arme
-        this.defense = defense
+    constructor(nom: string) {
+        super();
+        this.nom = nom;
+        this.metier = "Viking"; 
+        this.pointsVie += 25; 
+        this.force += 4; 
+        this.vitesse += 2; 
+        this.intelligence = 0; 
+        this.pointMana = 0; 
+        this.chanceCritique += 8; 
     }
 
     public fight(otherViking: Viking) {
-        const attackValue = this.getAttackValue()
-        const soinsValue = this.getHealedValueFromAttaque(attackValue)
-        otherViking.receiveAttack(attackValue)
-        this.heal(soinsValue)
-    }
+        const attackValue = this.getAttackValue();
+        const damageDealt = this.calculateDamageDealt(attackValue, otherViking);
+        
+        // Vol de vie : récupérer 15% des dégâts infligés en points de santé
+        const lifeStolen = Math.floor(damageDealt * 0.15);
+        this.pointsVie += lifeStolen;
 
-    public get force(): number {
-        return this._force + this.arme.force
+        // Récupérer 3% des dégâts infligés en points de mana
+        const manaGained = Math.floor(damageDealt * 0.03);
+        this.pointMana += manaGained;
+
+        otherViking.receiveAttack(damageDealt);
     }
 
     private getAttackValue(): number {
-        let attackValue = this.force
-        if(Math.random() < 0.1) {
-            attackValue *= 2
-        }
-        return attackValue
+        // Implémentez le calcul de la valeur d'attaque ici (par exemple, basée sur la force et autres facteurs)
+        return this.force;
     }
 
-    private getHealedValueFromAttaque(attaqueValue: number): number {
-        let soinsValue = 0
-        if(this.arme.isLameDeSang()){
-            soinsValue = Math.floor(attaqueValue * 0.13)
+    private calculateDamageDealt(attackValue: number, target: Viking): number {
+        let damageDealt = attackValue;
+
+        // Vérifier si le coup est critique (8% de chance)
+        if (Math.random() < 0.08) {
+            damageDealt *= 2; // Les coups critiques infligent le double de dégâts
         }
-        return soinsValue
+
+        // Appliquer la défense de la cible
+        damageDealt -= target.defense;
+
+        // Ne pas infliger de dégâts négatifs
+        if (damageDealt < 0) {
+            damageDealt = 0;
+        }
+
+        return damageDealt;
     }
 
-    private heal(amount: number) {
-        this.sante += amount
-        if(this.sante > this.santeInitiale) {
-            this.sante = this.santeInitiale
-        }
+    private receiveAttack(amount: number) {
+        // Implémentez la réception des dégâts ici en fonction de la valeur "amount"
+        // Réduisez les points de vie du Viking en conséquence
+        // Assurez-vous que les points de vie ne deviennent pas négatifs
     }
-
-    private receiveAttack(amount: number){
-        let totalLifeToLose = amount - this.defense
-        if(totalLifeToLose > 0) {
-            this.sante -= totalLifeToLose
-        }
-        if(this.sante < 0) {
-            this.sante = 0
-        }
-    }
-
 }
