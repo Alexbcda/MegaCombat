@@ -1,33 +1,62 @@
+import { Personnage } from "../Personnage";
 import { IObjet } from "./IObjet";
 
 
-abstract class Equipement implements IObjet{
+export abstract class Equipement implements IObjet {
+    
   private _prix: number;
   private _poids: number;
   private _level: number;
-  private _nom: string;
+  private _name: string;
+
+
+  abstract equip(personnage : Personnage) : any
+
+  use(personnage : Personnage): any {
+      this.equip(personnage);
+      console.log("L'objet est équipé")
+  }
+
+  constructor(prix : number, poids : number, level : number, name : string) { 
+      this._prix = prix;
+      this._poids = poids;
+      this._level = level;
+      this._name = name;
+  }
+
+  utiliser() {
+    throw new Error("Method not implemented.");
+  }
   
-  constructor(
-    prix: number,
-    poids: number,
-    level: number,
-    nom: string
-  ) {
-    this._prix = prix;
-    this._poids = poids;
-    this._level = level;
-    this._nom = nom;
+
+  public get prix(): number {
+      return this._prix;
   }
 
-  // Méthode abstraite pour utiliser l'équipement, à implémenter dans les sous-classes
-  public abstract utiliser(): void;
-
-  // Implémentation des méthodes de l'interface IObjet
-  public getPrix(): number {
-    return this._prix;
+  public set prix(value: number) {
+      this._prix = value;
   }
 
-  public getPoids(): number {
-    return this._poids;
+  public get poids(): number {
+      return this._poids;
+  }
+
+  public set poids(value: number) {
+      this._poids = value;
+  }
+
+  public get level(): number {
+      return this._level;
+  }
+
+  public set level(value: number) {
+      this._level = value;
+  }
+
+  public get name(): string {
+      return this._name;
+  }
+  public set name(value: string) {
+      this._name = value;
   }
 }
