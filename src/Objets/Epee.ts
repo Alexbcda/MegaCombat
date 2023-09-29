@@ -1,5 +1,5 @@
-import { Arme } from "../Arme";
 import { Personnage } from "../Personnage";
+import { Arme } from "./Arme";
 
 // Classe pour l'épée
 export class Epee extends Arme {
