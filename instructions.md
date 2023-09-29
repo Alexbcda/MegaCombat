@@ -129,3 +129,75 @@ _Vendredi 29 septembre_ : vers un système de sauvegarde et un petit idle game
 - Choix d'un niveau de difficulté en début de partie
 - Faire un système de zone de combat et de déplacements qui permet de gérer la difficulté et la progression
 - Chargement d'une sauvegarde
+
+
+## Vendredi 22 septembre : nouveaux système de compétence/capacité/sort et de combat
+
+Avec les modifications d'hier, il se peut que les combats entre les personnages ne se passe plus comme avant. Aujourd'hui nous allons corriger tout cela en refactorant le système de combat entre les personnages.
+
+Le système actuel manque de souplesse, les personnages qui s'affrontent sont tous de type Viking et le système d'attaque se fait par permutation dans la méthode simulate().
+
+```TypeScript
+
+public simulate() {
+
+        let fighterIndex = this.firstViking.force > this.secondViking.force ? 1 : 0
+
+        while (this.firstViking.sante > 0 && this.secondViking.sante > 0) {
+            const fighterViking = this.vikings[fighterIndex]
+            const defenserViking = this.vikings[1 - fighterIndex]
+
+            fighterViking.fight(defenserViking)
+
+            fighterIndex = 1 - fighterIndex
+        }
+    }
+```
+
+Pour aujourd'hui, nous allons faire une classe CombatHandler qui va nous permettre de mieux gérer les combat, les différents opposants, les capacités spéciales et toutes les interactions possibles lors des affrontements.
+
+Alors, comment s'organisent les combats :
+
+D'abord on déclare les deux partis qui s'affrontent. Le personnage du joueur ou de la joueuse et l'opposant.
+
+Ensuite on ordonne le tour de combat en comparant les vitesses des adversaires. Le personnage avec le plus de vitesse jouera en premier, ensuite on fait jouer les autres en triant par ordre décroissant de la vitesse
+
+Ensuite le tour de combat commence. C'est à ce moment que les actions des personnages BeforeFight() se lance, dans l'ordre de rapidité. Ensuite l'attaque à proprement dite. L'attaque se décompose en un avant, un pendant et un après, c'est à dire que les personnages vont avoir 3 appels de méthodes beforeAttack(), Attack() et AfterAttack(). Si la cible de l'attaque est touchée, alors on appelle sa méthode OnHit().
+
+Ensuite le premier personnage laisse la place au second qui va venir lui aussi porter son attaque, avec les 3 mêmes méthodes.
+
+La fin du tour de combat approche, les méthodes OnTurnEnd()
+
+## Lundi 25 septembre : implémentation d'un système de point d'expérience et de niveau
+
+## Mardi 26 septembre : ajout de nouveaux adversaire
+
+## Mercredi 27 septembre : ajout d'objets et d'un système de récompense
+
+## Jeudi 28 septembre : inventaire, pièce d'or et stockage d'objet
+
+## Vendredi 29 septembre : vers un système de sauvegarde et un petit idle game
+
+## Calendrier prévisionnel de release
+
+_Jeudi 21 septembre_ : nouveaux types de personnage
+_Vendredi 22 septembre_ : nouveaux système de compétence/capacité/sort et de combat
+
+_Lundi 25 septembre_ : implémentation d'un système de point d'expérience et de niveau
+_Mardi 26 septembre_ : ajout de nouveaux adversaires
+_Mercredi 27 septembre_ : ajout d'objets et d'un système de récompense
+_Jeudi 28 septembre_ : inventaire, pièce d'or et stockage d'objet
+_Vendredi 29 septembre_ : vers un système de sauvegarde et un petit idle game
+
+## Bonus (Backlog)
+
+- Créer un système de d'ethnie qui vient modifier les caractéristique de base des personnages
+- Faire un Boss tous les 5/10/15 combats
+- Faire un système de posture de combat (aggressive, défensive, esquive)
+- Interface graphique minimal avec du texte puis interface graphique avec interaction à la souris
+- Système de combat en équipe avec plusieurs personnages dans l'équipe
+- Faire une système de donjons
+- Faire des équipes d'adversaires
+- Choix d'un niveau de difficulté en début de partie
+- Faire un système de zone de combat et de déplacements qui permet de gérer la difficulté et la progression
+- Chargement d'une sauvegarde

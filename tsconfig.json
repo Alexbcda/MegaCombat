@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "outDir": "dist",
-    "target": "es6",
-    "strict": true
+    "target": "ESNext", // Version de JavaScript cible (peut être ajustée selon vos besoins)
+    "module": "CommonJS", // Système de modules (peut être ajusté selon vos besoins)
+    "outDir": "./dist", // Répertoire de sortie pour les fichiers compilés
+    "rootDir": "./src", // Répertoire source de votre projet
+    "strict": true, // Activer les vérifications strictes du compilateur TypeScript
+    "esModuleInterop": true // Activer l'interopérabilité des modules ES
   },
   "include": [
-    "src/**/*"
+    "./src/**/*.ts" // Spécifiez ici les fichiers source que vous souhaitez inclure dans la compilation
   ]
 }

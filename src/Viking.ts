@@ -1,62 +1,69 @@
 import { Personnage } from './Personnage';
 
+// Classe pour les Vikings
 export class Viking extends Personnage {
-    private defense: number = 10; // Définissez la valeur de défense par défaut ici
+    private _attaqueViking: number;
+    private _pointsVieSupViking: number;
+    private _forceSupViking: number;
+    private _vitesseSupViking: number;
+    private _intelligenceSupViking: number;
+    private _pointManaSupViking: number;
+    private _chanceCritiqueSupViking;
 
-    constructor(nom: string) {
-        super();
-        this.nom = nom;
-        this.metier = "Viking"; 
-        this.pointsVie += 25; 
-        this.force += 4; 
-        this.vitesse += 2; 
-        this.intelligence = 0; 
-        this.pointMana = 0; 
-        this.chanceCritique += 8; 
+    constructor(
+        nom: string,
+        pointsVieSupViking = 25,
+        forceSupViking = 4,
+        vitesseSupViking = 2,
+        intelligenceSupViking = 0,
+        pointManaSupViking = 0,
+        chanceCritiqueSupViking = 8
+    ) {
+        super(nom);
+
+        this._attaqueViking = 15;
+        this._pointsVieSupViking = pointsVieSupViking;
+        this._forceSupViking = forceSupViking;
+        this._vitesseSupViking = vitesseSupViking;
+        this._intelligenceSupViking = intelligenceSupViking;
+        this._pointManaSupViking = pointManaSupViking;
+        this._chanceCritiqueSupViking = chanceCritiqueSupViking;
     }
 
-    public fight(otherViking: Viking) {
-        const attackValue = this.getAttackValue();
-        const damageDealt = this.calculateDamageDealt(attackValue, otherViking);
-        
-        // Vol de vie : récupérer 15% des dégâts infligés en points de santé
-        const lifeStolen = Math.floor(damageDealt * 0.15);
-        this.pointsVie += lifeStolen;
-
-        // Récupérer 3% des dégâts infligés en points de mana
-        const manaGained = Math.floor(damageDealt * 0.03);
-        this.pointMana += manaGained;
-
-        otherViking.receiveAttack(damageDealt);
+    // CapacitéSpécialeArchers
+    capaciteSpecialeVikingVolVie(adversaire: Personnage) {
+        // Utilisez la méthode de la capacité spéciale générique pour les archers
+        this.capaciteSpeciale.capaciteSpecialeVikingVolVie(this, adversaire);
     }
 
-    private getAttackValue(): number {
-        // Implémentez le calcul de la valeur d'attaque ici (par exemple, basée sur la force et autres facteurs)
-        return this.force;
+    // Méthodes getter pour les attributs supplémentaires des Vikings
+   
+    get forceTotale(): number {
+        // Calculez ici la force totale du Viking en ajoutant sa force de base à ses attributs supplémentaires
+        return this.force + this._forceSupViking;
+    }
+   
+    get pointsVieSupViking(): number {
+        return this._pointsVieSupViking;
     }
 
-    private calculateDamageDealt(attackValue: number, target: Viking): number {
-        let damageDealt = attackValue;
-
-        // Vérifier si le coup est critique (8% de chance)
-        if (Math.random() < 0.08) {
-            damageDealt *= 2; // Les coups critiques infligent le double de dégâts
-        }
-
-        // Appliquer la défense de la cible
-        damageDealt -= target.defense;
-
-        // Ne pas infliger de dégâts négatifs
-        if (damageDealt < 0) {
-            damageDealt = 0;
-        }
-
-        return damageDealt;
+    get forceSupViking(): number {
+        return this._forceSupViking;
     }
 
-    private receiveAttack(amount: number) {
-        // Implémentez la réception des dégâts ici en fonction de la valeur "amount"
-        // Réduisez les points de vie du Viking en conséquence
-        // Assurez-vous que les points de vie ne deviennent pas négatifs
+    get vitesseSupViking(): number {
+        return this._vitesseSupViking;
+    }
+
+    get intelligenceSupViking(): number {
+        return this._intelligenceSupViking;
+    }
+
+    get pointManaSupViking(): number {
+        return this._pointManaSupViking;
+    }
+
+    get chanceCritiqueSupViking(): number {
+        return this._chanceCritiqueSupViking;
     }
 }

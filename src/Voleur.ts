@@ -1,7 +1,7 @@
 import { Personnage } from './Personnage';
 
 export class Voleur extends Personnage {
-    constructor(nom: string) {
+    constructor(nom: string, ) {
         super();
         this.nom = nom;
         this.pointsVie += 5; 
@@ -29,5 +29,8 @@ export class Voleur extends Personnage {
 
         // Comparez le résultat avec la chance de coup critique (exprimée en pourcentage)
         return randomValue < this.chanceCritique / 100;
+    }
+    get forceTotale(){
+        return this.force + this._attaqueMage
     }
 }

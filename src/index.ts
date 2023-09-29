@@ -1,10 +1,10 @@
-// Import classes de personnages que vous avez créées
+// Importez vos classes de personnages et CombatHandler
 import { Archer } from './Archer';
 import { Chevalier } from './Chevalier';
 import { Magicien } from './Magicien';
 import { Viking } from './Viking';
 import { Voleur } from './Voleur';
-
+import { CombatHandler } from './CombatHandler'; // Assurez-vous que le chemin d'accès au fichier est correct
 
 // Récupérez les éléments du DOM
 const archerButton = document.getElementById("archer") as HTMLButtonElement;
@@ -42,8 +42,7 @@ nomInput.addEventListener("input", () => {
 lancerCombatButton.addEventListener("click", () => {
     if (typePersonnage && nomPersonnage) {
         // L'utilisateur a choisi un type de personnage et a saisi un nom
-        // créer un personnage du type choisi avec le nom saisi
-        // lancer le combat 
+        // Créer un personnage du type choisi avec le nom saisi
         let personnage;
 
         switch (typePersonnage) {
@@ -59,8 +58,8 @@ lancerCombatButton.addEventListener("click", () => {
             case "Voleur":
                 personnage = new Voleur(nomPersonnage);
                 break;
-            case "Viking": 
-                personnage = new Viking(nomPersonnage); 
+            case "Viking":
+                personnage = new Viking(nomPersonnage);
                 break;
             default:
                 personnage = null;
@@ -71,7 +70,9 @@ lancerCombatButton.addEventListener("click", () => {
             const message = `Vous avez choisi un ${typePersonnage} nommé ${nomPersonnage}.`;
             resultatsDiv.textContent = message;
 
-            //  lancer le combat ou effectuer d'autres actions avec le personnage
+            // Ici, vous pouvez lancer le combat en utilisant CombatHandler
+            // Par exemple, si vous avez un adversaire appelé adversaire1 :
+            // CombatHandler.combat(personnage, adversaire1);
         } else {
             resultatsDiv.textContent = "Type de personnage invalide.";
         }

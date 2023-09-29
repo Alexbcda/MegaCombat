@@ -1,8 +1,10 @@
+import { isGeneratorFunction } from 'util/types';
 import { Bonus } from './Bonus';
+import { Metier } from './Metier';
+import { CapaciteSpeciale } from './CapaciteSpeciale';
 
-
-// Personnage.ts
-export class Personnage {
+export abstract class Personnage {
+    protected capaciteSpeciale: CapaciteSpeciale | null;
     private _nom: string;
     private _niveau: number;
     private _pointsExp: number;
@@ -13,14 +15,13 @@ export class Personnage {
     private _intelligence: number;
     private _pointMana: number;
     private _chanceCritique: number;
-    private _metier: string; // Attribut pour le métier
 
     // Attributs spécifiques pour les sorts et les bonus
     bonus: Bonus[];
 
-    constructor() {
-        this._nom = "";
-        this._niveau = 1;
+    constructor(nom: string, niveau = 1) {
+        this._nom = nom;
+        this._niveau = niveau;
         this._pointsExp = 0;
         this._type = "";
         this._pointsVie = 50;
@@ -29,16 +30,18 @@ export class Personnage {
         this._intelligence = 10;
         this._pointMana = 50;
         this._chanceCritique = 2;
-        this._metier = ""; // Initialisez l'attribut métier à vide
-
+        this.capaciteSpeciale = null; // Au départ, le personnage n'a pas de capacité spéciale
         // Initialisation des attributs spécifiques aux sorts et aux bonus
         this.bonus = [];
     }
-
-    attaquer() {
-        // Implémentez l'attaque normale ici
+    
+// Méthode pour activer la capacité spéciale
+utiliserCapaciteSpeciale(cible: Personnage) {
+    if (this.capaciteSpeciale) {
+        this.capaciteSpeciale.activer(this, cible);
+    } else {
+        console.log(`${this.nom} n'a pas de capacité spéciale.`);
     }
-
     // Méthode pour utiliser un bonus si possible
     utiliserBonus() {
         for (const bonus of this.bonus) {
@@ -49,16 +52,56 @@ export class Personnage {
         }
 
         // Si aucun bonus n'est utilisé, effectuer une attaque normale
-        this.attaquer();
     }
-// Méthode pour faire subir des dégâts au personnage
-subirDegats(degats: number) {
-    this.pointsVie -= degats;
-    if (this.pointsVie < 0) {
-        this.pointsVie = 0;
-    }
-}
 
+    // Méthode pour faire subir des dégâts au personnage
+    subirDegats(degats: number) {
+        this._pointsVie -= degats;
+        if (this._pointsVie < 0) {
+            this._pointsVie = 0;
+        }
+    }
+     
+    beforeFight() {
+        // Implémentez les actions à effectuer avant l'attaque ici
+    }
+
+    // Méthode pour attaquer un autre personnage s'il est en vie
+    attaquer(cible: Personnage) {
+        // Vérifiez d'abord si le personnage attaquant est en vie
+        if (!this.estEnVie()) {
+            console.log(`${this._nom} ne peut pas attaquer car il est mort.`);
+            return;
+        }
+
+        // Vérifiez ensuite si la cible est en vie
+        if (!cible.estEnVie()) {
+            console.log(`${this._nom} ne peut pas attaquer ${cible.nom} car la cible est morte.`);
+            return;
+        }
+
+        // Implémentez ici la logique d'attaque, par exemple, calcul des dégâts et application à la cible
+        const degats = /* Calcul des dégâts en fonction de la force, etc. */
+        cible.subirDegats(degats);
+
+        console.log(`${this._nom} attaque ${cible.nom} et lui inflige ${degats} points de dégâts.`);
+    }
+
+    // Méthode pour vérifier si le personnage est en vie
+    estEnVie() {
+        return this._pointsVie > 0;
+    }
+
+    AfterAttack(cible: Personnage) {
+        // Vérifiez si la cible est en vie
+        if (cible.estEnVie()) {
+            console.log(`${cible.nom} est toujours en vie après l'attaque.`);
+            // Le combat continue, rien de spécial à faire ici
+        } else {
+            console.log(`${cible.nom} est mort après l'attaque !`);
+            // La cible est morte, vous pouvez prendre des mesures supplémentaires si nécessaire
+        }
+    }
 
     // Getters et setters pour chaque attribut
     get nom(): string {
@@ -141,11 +184,6 @@ subirDegats(degats: number) {
         this._chanceCritique = chanceCritique;
     }
 
-    get metier(): string {
-        return this._metier;
-    }
+    abstract get forceTotale(): number;
 
-    set metier(metier: string) {
-        this._metier = metier;
-    }
 }
